@@ -20,7 +20,7 @@ export class GameComponent implements OnInit {
   height: number = 15;
   width: number = 21;
   walls: IWall[] = [];
-  softWallCount: number = 50;
+  softWallCount: number = 80;
   softWalls: IWall[] = [];
   bomber: IBomber = {
     pos: {
@@ -93,8 +93,8 @@ export class GameComponent implements OnInit {
     for (let i = 0; i < this.softWallCount; i++) {
       this.softWalls.push({
         pos: {
-          x: random(1, this.width - 1, 'odd'),
-          y: random(1, this.height - 1, 'odd'),
+          x: random(1, this.width - 2),
+          y: random(1, this.height - 2, 'odd'),
         },
       });
     }
@@ -103,8 +103,8 @@ export class GameComponent implements OnInit {
   generateBomber() {
     let count = 0;
     const pos = {
-      x: random(1, this.width - 1, 'odd'),
-      y: random(1, this.height - 1, 'odd'),
+      x: random(1, this.width - 2, 'odd'),
+      y: random(1, this.height - 2, 'odd'),
     };
     const isAroundPositionAvailable = this.checkPositionBomber(pos);
     if (!isAroundPositionAvailable) {
