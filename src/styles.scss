@@ -1,1 +1,26 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@mixin block {
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+}
+
+.block {
+  @include block;
+}
+
+.game {
+  position: relative;
+}
+
+.wall {
+  @extend .block;
+  background-color: #dfdfde;
+  box-shadow: inset 0 0 0 4px #8d8daa;
+  position: absolute;
+}
