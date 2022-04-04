@@ -4,4 +4,6 @@
 <app-soft-wall class="soft-wall" *ngFor="let w of softWalls" [ngStyle]="getStylePos(w.pos)">
 </app-soft-wall>
 
+<app-monster class="monster" *ngFor="let m of monsters" [ngStyle]="getStylePos(m.pos)"></app-monster>
+
 <app-bomber class="bomber" [ngStyle]="getStylePos(bomber.pos)"></app-bomber>

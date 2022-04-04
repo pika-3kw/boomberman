@@ -5,6 +5,7 @@ import { BLOCK_SIZE } from '../../constants/game';
 
 import { random } from '../../helpers/random';
 import { IBomber } from '../bomber/bomber.component';
+import { IMonster } from '../monster/monster.component';
 
 interface IPosition {
   x: number;
@@ -28,12 +29,15 @@ export class GameComponent implements OnInit {
       y: 0,
     },
   };
+  monsterCount: number = 10;
+  monsters: IMonster[] = [];
 
   constructor() {
     this.generateEdgelWalls();
     this.generateInnerWalls();
     this.generateSoftWalls();
     this.generateBomber();
+    this.generateMonsters();
   }
 
   generateEdgelWalls() {
@@ -92,6 +96,17 @@ export class GameComponent implements OnInit {
   generateSoftWalls() {
     for (let i = 0; i < this.softWallCount; i++) {
       this.softWalls.push({
+        pos: {
+          x: random(1, this.width - 2),
+          y: random(1, this.height - 2, 'odd'),
+        },
+      });
+    }
+  }
+
+  generateMonsters() {
+    for (let i = 0; i < this.monsterCount; i++) {
+      this.monsters.push({
         pos: {
           x: random(1, this.width - 2),
           y: random(1, this.height - 2, 'odd'),

@@ -6,9 +6,17 @@ import { WallComponent } from './wall/wall.component';
 import { GameComponent } from './game/game.component';
 import { SoftWallComponent } from './soft-wall/soft-wall.component';
 import { BomberComponent } from './bomber/bomber.component';
+import { MonsterComponent } from './monster/monster.component';
 
 @NgModule({
-  declarations: [AppComponent, WallComponent, GameComponent, SoftWallComponent, BomberComponent],
+  declarations: [
+    AppComponent,
+    WallComponent,
+    GameComponent,
+    SoftWallComponent,
+    BomberComponent,
+    MonsterComponent,
+  ],
   imports: [BrowserModule],
   providers: [],
   bootstrap: [AppComponent],
