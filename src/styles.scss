@@ -30,3 +30,9 @@
   background-color: #d8d2cb;
   position: absolute;
 }
+
+.bomber {
+  @extend .block;
+  background-color: #30aadd;
+  position: absolute;
+}

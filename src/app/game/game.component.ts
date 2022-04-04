@@ -1,9 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 
-import { IWall, IWallPos } from '../wall/wall.component';
+import { IWall } from '../wall/wall.component';
 import { BLOCK_SIZE } from '../../constants/game';
 
 import { random } from '../../helpers/random';
+import { IBomber } from '../bomber/bomber.component';
+
+interface IPosition {
+  x: number;
+  y: number;
+}
 
 @Component({
   selector: 'app-game',
@@ -16,11 +22,18 @@ export class GameComponent implements OnInit {
   walls: IWall[] = [];
   softWallCount: number = 50;
   softWalls: IWall[] = [];
+  bomber: IBomber = {
+    pos: {
+      x: 0,
+      y: 0,
+    },
+  };
 
   constructor() {
     this.generateEdgelWalls();
     this.generateInnerWalls();
     this.generateSoftWalls();
+    this.generateBomber();
   }
 
   generateEdgelWalls() {
@@ -87,9 +100,57 @@ export class GameComponent implements OnInit {
     }
   }
 
+  generateBomber() {
+    let count = 0;
+    const pos = {
+      x: random(1, this.width - 1, 'odd'),
+      y: random(1, this.height - 1, 'odd'),
+    };
+    const isAroundPositionAvailable = this.checkPositionBomber(pos);
+    if (!isAroundPositionAvailable) {
+      this.generateBomber();
+    }
+  }
+
+  checkPositionBomber(pos: IPosition): any {
+    const unavailablePostions = [...this.walls, ...this.softWalls];
+    const isBomberPosAvailable = unavailablePostions.findIndex((item) =>
+      this.comparePostition(item.pos, pos)
+    );
+
+    if (!isBomberPosAvailable) {
+      return false;
+    }
+
+    this.bomber.pos = pos;
+
+    const checkAroundPostition = [
+      { x: pos.x - 1, y: pos.y - 1 },
+      { x: pos.x - 1, y: pos.y },
+      { x: pos.x - 1, y: pos.y + 1 },
+      { x: pos.x, y: pos.y - 1 },
+      { x: pos.x, y: pos.y + 1 },
+      { x: pos.x + 1, y: pos.y - 1 },
+      { x: pos.x + 1, y: pos.y },
+      { x: pos.x + 1, y: pos.y + 1 },
+    ]
+      .map((p) => {
+        return unavailablePostions.findIndex((item) =>
+          this.comparePostition(p, item.pos)
+        );
+      })
+      .filter((r) => r < 0).length;
+
+    return checkAroundPostition >= 2;
+  }
+
+  comparePostition(pos1: IPosition, pos2: IPosition) {
+    return pos1.x === pos2.x && pos1.y === pos2.y;
+  }
+
   ngOnInit(): void {}
 
-  getStylePos(pos: IWallPos) {
+  getStylePos(pos: IPosition) {
     return {
       top: pos.y * BLOCK_SIZE + 'px',
       left: pos.x * BLOCK_SIZE + 'px',
