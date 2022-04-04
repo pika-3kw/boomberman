@@ -1,0 +1,14 @@
+{
+  "singleQuote": true,
+  "endOfLine": "lf",
+  "arrowParens": "always",
+  "overrides": [
+    {
+      "files": "**/*.html",
+      "options": {
+        "tabWidth": 4,
+        "parser": "html"
+      }
+    }
+  ]
+}
