@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { IWall, IWallPos } from '../wall/wall.component';
 import { BLOCK_SIZE } from '../../constants/game';
 
+import { random } from '../../helpers/random';
+
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
@@ -12,10 +14,13 @@ export class GameComponent implements OnInit {
   height: number = 15;
   width: number = 21;
   walls: IWall[] = [];
+  softWallCount: number = 50;
+  softWalls: IWall[] = [];
 
   constructor() {
     this.generateEdgelWalls();
     this.generateInnerWalls();
+    this.generateSoftWalls();
   }
 
   generateEdgelWalls() {
@@ -68,6 +73,17 @@ export class GameComponent implements OnInit {
           },
         });
       }
+    }
+  }
+
+  generateSoftWalls() {
+    for (let i = 0; i < this.softWallCount; i++) {
+      this.softWalls.push({
+        pos: {
+          x: random(1, this.width - 1, 'odd'),
+          y: random(1, this.height - 1, 'odd'),
+        },
+      });
     }
   }
 
