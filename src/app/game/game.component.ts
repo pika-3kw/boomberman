@@ -4,12 +4,12 @@ import { select, Store } from '@ngrx/store';
 
 import { setGameArea } from './game.actions';
 
-import { IWall } from '../wall/wall.component';
+import { IWall, Wall } from '../wall/wall.model';
 import { BLOCK_SIZE } from '../../constants/game';
 
 import { random } from '../../helpers/random';
 import { IBomber } from '../bomber/bomber.component';
-import { IMonster } from '../monster/monster.model';
+import { IMonster, Monster } from '../monster/monster.model';
 import { IPosition } from 'src/interfaces/Position';
 
 export interface IGameArea {
@@ -41,94 +41,17 @@ export class GameComponent implements OnInit {
     },
   };
   monsterCount: number = 10;
-  monsters: IMonster[] = [];
+  monsters: Monster[] = [];
 
   constructor(private store: Store<{ game: IGame }>) {
     this.game$ = store.pipe(select('game'));
     this.gameArea = { width: 21, height: 15 };
     this.store.dispatch(setGameArea(this.gameArea));
 
-    this.generateEdgelWalls();
-    this.generateInnerWalls();
-    this.generateSoftWalls();
+    this.walls = Wall.generateWall(this.gameArea);
+    this.softWalls = Wall.generateSoftWalls(this.gameArea, this.softWallCount);
+    this.monsters = Monster.generateMonsters(this.gameArea, this.monsterCount);
     this.generateBomber();
-    this.generateMonsters();
-  }
-
-  generateEdgelWalls() {
-    console.log(this.gameArea);
-    for (let i = 0; i < this.gameArea.width; i++) {
-      this.walls.push(
-        ...[
-          {
-            pos: {
-              x: i,
-              y: 0,
-            },
-          },
-          {
-            pos: {
-              x: i,
-              y: this.gameArea.height - 1,
-            },
-          },
-        ]
-      );
-    }
-
-    for (let i = 1; i < this.gameArea.height - 1; i++) {
-      this.walls.push(
-        ...[
-          {
-            pos: {
-              x: 0,
-              y: i,
-            },
-          },
-          {
-            pos: {
-              x: this.gameArea.width - 1,
-              y: i,
-            },
-          },
-        ]
-      );
-    }
-  }
-
-  generateInnerWalls() {
-    for (let i = 2; i < this.gameArea.height - 1; i += 2) {
-      for (let j = 2; j < this.gameArea.width - 1; j += 2) {
-        this.walls.push({
-          pos: {
-            x: j,
-            y: i,
-          },
-        });
-      }
-    }
-  }
-
-  generateSoftWalls() {
-    for (let i = 0; i < this.softWallCount; i++) {
-      this.softWalls.push({
-        pos: {
-          x: random(1, this.gameArea.width - 2),
-          y: random(1, this.gameArea.height - 2, 'odd'),
-        },
-      });
-    }
-  }
-
-  generateMonsters() {
-    for (let i = 0; i < this.monsterCount; i++) {
-      this.monsters.push({
-        pos: {
-          x: random(1, this.gameArea.width - 2),
-          y: random(1, this.gameArea.height - 2, 'odd'),
-        },
-      });
-    }
   }
 
   generateBomber() {

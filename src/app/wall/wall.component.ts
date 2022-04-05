@@ -1,15 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { BLOCK_SIZE } from '../../constants/game';
-
-export interface IWallPos {
-  x: number;
-  y: number;
-}
-
-export interface IWall {
-  pos: IWallPos;
-}
+import { getStylePos } from '../../helpers/styles';
+import { IWallPos, Wall } from './wall.model';
 
 @Component({
   selector: 'app-wall',
@@ -22,7 +14,13 @@ export class WallComponent implements OnInit {
     y: 0,
   };
 
+  wall: Wall | undefined;
+
   constructor() {}
 
   ngOnInit(): void {}
+
+  stylePosition() {
+    return getStylePos(this.pos);
+  }
 }
