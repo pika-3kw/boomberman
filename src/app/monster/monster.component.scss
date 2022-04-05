@@ -1,3 +1,12 @@
+@import '../../scss/mixins.scss';
+
 :host {
   position: absolute;
+}
+
+.monster {
+  @include block;
+  background-color: #ff85b3;
+  position: absolute;
+  z-index: 10;
 }

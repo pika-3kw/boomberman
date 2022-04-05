@@ -1,8 +1,5 @@
-<app-wall *ngFor="let w of walls" [pos]="w.pos">
+<app-wall *ngFor="let w of walls" [type]="w.type" [pos]="w.pos">
 </app-wall>
-
-<app-soft-wall *ngFor="let w of softWalls" [pos]="w.pos">
-</app-soft-wall>
 
 <app-monster *ngFor="let m of monsters" [pos]="m.pos"></app-monster>
 

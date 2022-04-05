@@ -8,6 +8,8 @@ export interface IWall {
   pos: IWallPos;
 }
 
+export type TWall = 'hard' | 'soft';
+
 export class Wall implements IWall {
   static walls: Wall[] = [];
   static softWalls: Wall[] = [];
@@ -47,14 +49,17 @@ export class Wall implements IWall {
   static generateSoftWalls(area: IGameArea, softWallCount: number) {
     for (let i = 0; i < softWallCount; i++) {
       this.softWalls.push(
-        new Wall({
-          x: random(1, area.width - 2),
-          y: random(1, area.height - 2, 'odd'),
-        })
+        new Wall(
+          {
+            x: random(1, area.width - 2),
+            y: random(1, area.height - 2, 'odd'),
+          },
+          'soft'
+        )
       );
     }
     return this.softWalls;
   }
 
-  constructor(public pos: IWallPos) {}
+  constructor(public pos: IWallPos, public type: TWall = 'hard') {}
 }

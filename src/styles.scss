@@ -1,13 +1,9 @@
+@import './scss/mixins.scss';
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-@mixin block {
-  width: 50px;
-  height: 50px;
-  display: inline-block;
 }
 
 .block {
@@ -16,28 +12,6 @@
 
 .game {
   position: relative;
-}
-
-.wall {
-  @extend .block;
-  background-color: #dfdfde;
-  box-shadow: inset 0 0 0 4px #8d8daa;
-  position: absolute;
-  z-index: 1;
-}
-
-.soft-wall {
-  @extend .block;
-  background-color: #d8d2cb;
-  position: absolute;
-  z-index: 20;
-}
-
-.monster {
-  @extend .block;
-  background-color: #ff85b3;
-  position: absolute;
-  z-index: 10;
 }
 
 .bomber {

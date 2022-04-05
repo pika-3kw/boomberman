@@ -31,7 +31,7 @@ export class GameComponent implements OnInit {
 
   gameArea: IGameArea = { width: 0, height: 0 };
 
-  walls: IWall[] = [];
+  walls: Wall[] = [];
   softWallCount: number = 80;
   softWalls: IWall[] = [];
   bomber: IBomber = {
@@ -49,7 +49,10 @@ export class GameComponent implements OnInit {
     this.store.dispatch(setGameArea(this.gameArea));
 
     this.walls = Wall.generateWall(this.gameArea);
-    this.softWalls = Wall.generateSoftWalls(this.gameArea, this.softWallCount);
+    this.walls.push(
+      ...Wall.generateSoftWalls(this.gameArea, this.softWallCount)
+    );
+    // this.softWalls = Wall.generateSoftWalls(this.gameArea, this.softWallCount);
     this.monsters = Monster.generateMonsters(this.gameArea, this.monsterCount);
     this.generateBomber();
   }

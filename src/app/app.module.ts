@@ -8,7 +8,6 @@ import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { WallComponent } from './wall/wall.component';
 import { GameComponent, IGame } from './game/game.component';
-import { SoftWallComponent } from './soft-wall/soft-wall.component';
 import { BomberComponent } from './bomber/bomber.component';
 import { MonsterComponent } from './monster/monster.component';
 import { GamedModule } from './game/game.module';
@@ -18,7 +17,6 @@ import { GamedModule } from './game/game.module';
     AppComponent,
     WallComponent,
     GameComponent,
-    SoftWallComponent,
     BomberComponent,
     MonsterComponent,
   ],
