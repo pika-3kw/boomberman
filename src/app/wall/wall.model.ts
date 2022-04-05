@@ -8,7 +8,7 @@ export interface IWall {
   pos: IWallPos;
 }
 
-export type TWall = 'hard' | 'soft';
+export type WallType = 'hard' | 'soft';
 
 export class Wall implements IWall {
   static walls: Wall[] = [];
@@ -61,5 +61,5 @@ export class Wall implements IWall {
     return this.softWalls;
   }
 
-  constructor(public pos: IWallPos, public type: TWall = 'hard') {}
+  constructor(public pos: IWallPos, public type: WallType = 'hard') {}
 }

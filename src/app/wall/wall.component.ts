@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { getStylePos } from '../../helpers/styles';
-import { IWallPos, TWall, Wall } from './wall.model';
+import { IWallPos, WallType, Wall } from './wall.model';
 
 @Component({
   selector: 'app-wall',
@@ -13,7 +13,7 @@ export class WallComponent implements OnInit {
     x: 0,
     y: 0,
   };
-  @Input() type: TWall = 'hard';
+  @Input() type: WallType = 'hard';
 
   wall: Wall | undefined;
 
