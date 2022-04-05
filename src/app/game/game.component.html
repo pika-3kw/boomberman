@@ -3,4 +3,4 @@
 
 <app-monster *ngFor="let m of monsters" [pos]="m.pos"></app-monster>
 
-<app-bomber class="bomber" [ngStyle]="getStylePos(bomber.pos)"></app-bomber>
+<app-bomber [pos]="bomber.pos"></app-bomber>

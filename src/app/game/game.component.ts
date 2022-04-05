@@ -5,12 +5,10 @@ import { select, Store } from '@ngrx/store';
 import { setGameArea } from './game.actions';
 
 import { IWall, Wall } from '../wall/wall.model';
-import { BLOCK_SIZE } from '../../constants/game';
 
-import { random } from '../../helpers/random';
 import { IBomber } from '../bomber/bomber.component';
-import { IMonster, Monster } from '../monster/monster.model';
-import { IPosition } from 'src/interfaces/Position';
+import { Monster } from '../monster/monster.model';
+import { Bomber } from '../bomber/bomber.model';
 
 export interface IGameArea {
   width: number;
@@ -52,64 +50,10 @@ export class GameComponent implements OnInit {
     this.walls.push(
       ...Wall.generateSoftWalls(this.gameArea, this.softWallCount)
     );
-    // this.softWalls = Wall.generateSoftWalls(this.gameArea, this.softWallCount);
+
     this.monsters = Monster.generateMonsters(this.gameArea, this.monsterCount);
-    this.generateBomber();
-  }
-
-  generateBomber() {
-    const pos = {
-      x: random(1, this.gameArea.width - 2, 'odd'),
-      y: random(1, this.gameArea.height - 2, 'odd'),
-    };
-    const isAroundPositionAvailable = this.checkPositionBomber(pos);
-    if (!isAroundPositionAvailable) {
-      this.generateBomber();
-    }
-  }
-
-  checkPositionBomber(pos: IPosition): any {
-    const unavailablePostions = [...this.walls, ...this.softWalls];
-    const isBomberPosAvailable = unavailablePostions.findIndex((item) =>
-      this.comparePostition(item.pos, pos)
-    );
-
-    if (!isBomberPosAvailable) {
-      return false;
-    }
-
-    this.bomber.pos = pos;
-
-    const checkAroundPostition = [
-      { x: pos.x - 1, y: pos.y - 1 },
-      { x: pos.x - 1, y: pos.y },
-      { x: pos.x - 1, y: pos.y + 1 },
-      { x: pos.x, y: pos.y - 1 },
-      { x: pos.x, y: pos.y + 1 },
-      { x: pos.x + 1, y: pos.y - 1 },
-      { x: pos.x + 1, y: pos.y },
-      { x: pos.x + 1, y: pos.y + 1 },
-    ]
-      .map((p) => {
-        return unavailablePostions.findIndex((item) =>
-          this.comparePostition(p, item.pos)
-        );
-      })
-      .filter((r) => r < 0).length;
-
-    return checkAroundPostition >= 2;
-  }
-
-  comparePostition(pos1: IPosition, pos2: IPosition) {
-    return pos1.x === pos2.x && pos1.y === pos2.y;
+    this.bomber = Bomber.generateBomber(this.gameArea, this.walls);
   }
 
   ngOnInit(): void {}
-
-  getStylePos(pos: IPosition) {
-    return {
-      top: pos.y * BLOCK_SIZE + 'px',
-      left: pos.x * BLOCK_SIZE + 'px',
-    };
-  }
 }

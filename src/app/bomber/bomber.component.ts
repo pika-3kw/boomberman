@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { getStylePos } from '../../helpers/styles';
 
 export interface IBomberPos {
   x: number;
@@ -15,7 +16,13 @@ export interface IBomber {
   styleUrls: ['./bomber.component.scss'],
 })
 export class BomberComponent implements OnInit {
+  @Input() pos: IBomberPos = { x: 0, y: 0 };
+
   constructor() {}
 
   ngOnInit(): void {}
+
+  stylePosition() {
+    return getStylePos(this.pos);
+  }
 }
