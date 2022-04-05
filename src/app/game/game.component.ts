@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Observable } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 
@@ -8,7 +8,8 @@ import { IWall, Wall } from '../wall/wall.model';
 
 import { IBomber } from '../bomber/bomber.component';
 import { Monster } from '../monster/monster.model';
-import { Bomber } from '../bomber/bomber.model';
+import { Bomber, BomberControl } from '../bomber/bomber.model';
+import { Map } from '../map/map.model';
 
 export interface IGameArea {
   width: number;
@@ -32,14 +33,34 @@ export class GameComponent implements OnInit {
   walls: Wall[] = [];
   softWallCount: number = 80;
   softWalls: IWall[] = [];
-  bomber: IBomber = {
-    pos: {
-      x: 0,
-      y: 0,
-    },
-  };
+  bomber: Bomber;
   monsterCount: number = 10;
   monsters: Monster[] = [];
+  map: Map;
+
+  keysControl = ['w', 'a', 's', 'd'];
+
+  @HostListener('document:keypress', ['$event'])
+  onKeyboardPress(e: KeyboardEvent) {
+    const { key } = e;
+
+    switch (key.toLowerCase()) {
+      case 'w':
+        this.bomber.run(BomberControl.UP);
+        return;
+      case 's':
+        this.bomber.run(BomberControl.DOWN);
+        return;
+      case 'a':
+        this.bomber.run(BomberControl.LEFT);
+        return;
+      case 'd':
+        this.bomber.run(BomberControl.RIGHT);
+        return;
+      default:
+        return;
+    }
+  }
 
   constructor(private store: Store<{ game: IGame }>) {
     this.game$ = store.pipe(select('game'));
@@ -52,7 +73,8 @@ export class GameComponent implements OnInit {
     );
 
     this.monsters = Monster.generateMonsters(this.gameArea, this.monsterCount);
-    this.bomber = Bomber.generateBomber(this.gameArea, this.walls);
+    this.map = new Map(this.walls);
+    this.bomber = Bomber.generateBomber(this.gameArea, this.map);
   }
 
   ngOnInit(): void {}

@@ -8,6 +8,7 @@ export interface IBomberPos {
 
 export interface IBomber {
   pos: IBomberPos;
+  run(): void;
 }
 
 @Component({
