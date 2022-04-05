@@ -1,15 +1,24 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+
+import { setGameArea } from './game.actions';
 
 import { IWall } from '../wall/wall.component';
 import { BLOCK_SIZE } from '../../constants/game';
 
 import { random } from '../../helpers/random';
 import { IBomber } from '../bomber/bomber.component';
-import { IMonster } from '../monster/monster.component';
+import { IMonster } from '../monster/monster.model';
+import { IPosition } from 'src/interfaces/Position';
 
-interface IPosition {
-  x: number;
-  y: number;
+export interface IGameArea {
+  width: number;
+  height: number;
+}
+
+export interface IGame {
+  area: IGameArea;
 }
 
 @Component({
@@ -18,8 +27,10 @@ interface IPosition {
   styleUrls: ['./game.component.scss'],
 })
 export class GameComponent implements OnInit {
-  height: number = 15;
-  width: number = 21;
+  game$: Observable<IGame>;
+
+  gameArea: IGameArea = { width: 0, height: 0 };
+
   walls: IWall[] = [];
   softWallCount: number = 80;
   softWalls: IWall[] = [];
@@ -32,7 +43,11 @@ export class GameComponent implements OnInit {
   monsterCount: number = 10;
   monsters: IMonster[] = [];
 
-  constructor() {
+  constructor(private store: Store<{ game: IGame }>) {
+    this.game$ = store.pipe(select('game'));
+    this.gameArea = { width: 21, height: 15 };
+    this.store.dispatch(setGameArea(this.gameArea));
+
     this.generateEdgelWalls();
     this.generateInnerWalls();
     this.generateSoftWalls();
@@ -41,7 +56,8 @@ export class GameComponent implements OnInit {
   }
 
   generateEdgelWalls() {
-    for (let i = 0; i < this.width; i++) {
+    console.log(this.gameArea);
+    for (let i = 0; i < this.gameArea.width; i++) {
       this.walls.push(
         ...[
           {
@@ -53,14 +69,14 @@ export class GameComponent implements OnInit {
           {
             pos: {
               x: i,
-              y: this.height - 1,
+              y: this.gameArea.height - 1,
             },
           },
         ]
       );
     }
 
-    for (let i = 1; i < this.height - 1; i++) {
+    for (let i = 1; i < this.gameArea.height - 1; i++) {
       this.walls.push(
         ...[
           {
@@ -71,7 +87,7 @@ export class GameComponent implements OnInit {
           },
           {
             pos: {
-              x: this.width - 1,
+              x: this.gameArea.width - 1,
               y: i,
             },
           },
@@ -81,8 +97,8 @@ export class GameComponent implements OnInit {
   }
 
   generateInnerWalls() {
-    for (let i = 2; i < this.height - 1; i += 2) {
-      for (let j = 2; j < this.width - 1; j += 2) {
+    for (let i = 2; i < this.gameArea.height - 1; i += 2) {
+      for (let j = 2; j < this.gameArea.width - 1; j += 2) {
         this.walls.push({
           pos: {
             x: j,
@@ -97,8 +113,8 @@ export class GameComponent implements OnInit {
     for (let i = 0; i < this.softWallCount; i++) {
       this.softWalls.push({
         pos: {
-          x: random(1, this.width - 2),
-          y: random(1, this.height - 2, 'odd'),
+          x: random(1, this.gameArea.width - 2),
+          y: random(1, this.gameArea.height - 2, 'odd'),
         },
       });
     }
@@ -108,18 +124,17 @@ export class GameComponent implements OnInit {
     for (let i = 0; i < this.monsterCount; i++) {
       this.monsters.push({
         pos: {
-          x: random(1, this.width - 2),
-          y: random(1, this.height - 2, 'odd'),
+          x: random(1, this.gameArea.width - 2),
+          y: random(1, this.gameArea.height - 2, 'odd'),
         },
       });
     }
   }
 
   generateBomber() {
-    let count = 0;
     const pos = {
-      x: random(1, this.width - 2, 'odd'),
-      y: random(1, this.height - 2, 'odd'),
+      x: random(1, this.gameArea.width - 2, 'odd'),
+      y: random(1, this.gameArea.height - 2, 'odd'),
     };
     const isAroundPositionAvailable = this.checkPositionBomber(pos);
     if (!isAroundPositionAvailable) {
